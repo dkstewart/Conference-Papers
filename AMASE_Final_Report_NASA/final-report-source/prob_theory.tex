@@ -1,0 +1,230 @@
+\subsubsection{Probabilistic Analysis Algorithm}
+\label{sec:probAlg}
+In order to complete the probabilistic analysis, we must first calculate allowable combinations of faults. This allows us the option to eliminate unnecessary combinations while performing the algorithm, thus increasing performance and diminishing the problem of combinatorial explosions in the size of minimal cut sets for larger models. 
+
+After the allowable combinations have been found, the algorithm described in Section~\ref{sec:transformation} is performed with pruning in order to eliminate probabilistically impossible fault combinations. \\
+
+\textbf{Collect Allowable Fault Combinations}
+The collection of allowable fault combinations is a prerequsite needed for both \textit{Verify in the Presence of Faults} and \textit{Generate Minimal Cut Set} analysis and the algorithm used is described in Section 6.2.2.  In order to calculate allowable combinations, we must take into account probabilities of the combined faults and compare with the given threshold. Each of the allowable fault combinations has a combined probability that we must later access. These combinations are saved in a list called $\mathcal{A}$:
+
+$\mathcal{A} = \{A_i = FaultCombinations$ $|$  $P(FaultCombinations) > threshold\}$
+
+The allowable combinations in $\mathcal{A}$ consist of independent faults. \\
+
+
+%\textbf{Generate Minimal Cut Sets and Prune Combinations}
+\textbf{Prune MinCutSets}
+During the transformation process, if the minimal cut set for a contract is not a subset of any allowed fault combinations, this intermediate set containing this contract is pruned. (Recall that an intermediate set $I$ is obtained by removing all constraints from an $MCS$ and contract replacement has begun.) This pruning occurs in the algorithm described in Section~\ref{sec:transformation} and the resulting allowable combinations are displayed to the user.
+
+%Theoretically, there are other places that pruning can occur in this algorithm. The implementation of the Safety Annex utilizes the pruning as described previously. Throughout this discussion, we use the following notation to describe these sets. They are listed here for convenience. 
+
+The implementation of the Safety Annex utilizes the pruning as described above. Theoretically, there are two other options for pruning in this algorithm. They are outlined here for completion. Throughout this discussion, we use the following notation to describe these sets. They are listed here for convenience.
+
+$\mathcal{A}$ : the set of all allowable fault combinations 
+
+$\mathcal{A}_i $ : an individual allowable combination and an element of $\mathcal{A}$
+
+$List(I)$ : the set of all intermediate sets
+
+$I_i$ : an element of $List(I)$. 
+
+$Cut(g_j)$ : all minimal cut sets for contract $g_j$. 
+
+$cut_k(g_j)$ : a specific cut set for contract $g_j$. This is an element of $Cut(g_j)$.  \\
+
+\textbf{Option 1}: Once the replacement is complete and the algorithm terminates, we have all $MinCutSets$ for a top level property. If $MinCutSet \not \subseteq \mathcal{A}_i$ for all $\mathcal{A}_i \in \mathcal{A}$, then we can safely eliminate $MinCutSet$. This is the latest form of pruning and the drawback is when the number of generated cut sets grows, no elimination occurs early. This can be difficult in terms of scalability. 
+
+\textbf{Option 2}: Pruning can also be done by checking the union of a minimal cut set for a contract in $I$ with all the faults in that $I$. If the union of these faults is not an allowable combination, %it can be eliminated.
+the minimal cut set for this contract in $I$ will be skipped for the replacement. More formally, if ($\{f_n | f_n \in I_i\} \cup cut_k(g_j)) \not \subseteq  \mathcal{A}_i $ for all $\mathcal{A}_i \in \mathcal{A}$, then we can safely eliminate this $I_i$. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{comment}
+At the leaf level, only faults are contained in IVCs (and consequently in $MCS$s). Thus we store these cut sets in a lookup table for quick access throughout the algorithm. For this algorithm, we assume we are in an intermediate level of the analysis. Given a hypothesis probability threshold, we find only the cut sets that contain allowable combinations of faults in terms of probability of occurrance. Assume we have used the hitting set algorithm to generate $MCS$s from the IVCs and we have calculated allowable fault combinations. This is where the algorithm begins. \\
+
+Throughout this discussion, we use the following notation to describe these sets. They are listed here for convenience. 
+
+$List(MCS)$ : the set of all MCSs
+
+$MCS_i$ : an element of $List(MCS)$. 
+
+$Cut(g_j)$ : all minimal cut sets for contract $g_j$. 
+
+$cut_k(g_j)$ : a specific cut set for contract $g_j$. This is an element of $Cut(g_j)$.  \\
+
+In this algorithm, we have a few options where to prune sets that do not correspond with allowed combinations. For completion, we include a discussion on these three options. In our implementation, we chose to perform Option 1 and pruned after inlining was complete. 
+
+\textbf{Option 1}: Once the inlining is complete and we have a minimal cut set, if $MinCutSet \not \subseteq \mathcal{F}_i $, then we can safely eliminate $MinCutSet$. We avoid the overhead of checking subsets in $\mathcal{F}$, but we have the complete overhead of inlining. 
+
+\textbf{Option 2}: Pruning can also be done to a $MCS$ if the cut set for any contract within a $MCS$ is not an allowable combination. More formally, if $cut_k(g_j) \not \subseteq \mathcal{F}_i$ where $\mathcal{F}$ is the set of all possible combinations $\mathcal{F}_i $, then we can safely eliminate the $MCS_i$ in which $g_j$ is located. This option has benefits terms of early elimination, but would have a detrimental overhead in other areas. A search over $\mathcal{F}$ is required to determine if $cut_k(g_j)$ is a subset of one of the allowed combinations and a final elimination after inlining is complete would also be required.
+
+%Ex: Let $\mathcal{F} = \{\{f_1,f_2,f_5\},\{f_6\}\}\}$ be the allowed fault combinations. Let $MCS = \{f_1,g_1,g_2\}$,  $Cut(g_1) = \{\{f_2\}\}$, $Cut(g_2) = \{\{f_5\},\{f_6\}\}$. Then for option 2, we would not eliminate anything: $cut_1(g_1) = \{f2\} \subseteq \mathcal{F}_i$ and likewise for $cut_1(g_2)$ and $cut_2(g_2)$. 
+
+%The MCSs generated through the inlining process are: $MCS_1 = \{f_1,f_2,f_5\}$ and $MCS_2 = \{f_1,f_2,f_6\}$ which provides one combination which should be eliminated. Thus we would have to perform another check at the end of the algorithm to eliminate these. \\
+
+\textbf{Option 3}: Pruning can also be done by checking the union of a cut set for a contract in $MCS$ with the faults in that $MCS$. If the union of these faults is not an allowable combination, it can be eliminated. More formally, if ($\{f_n | f_n \in MCS_i\} \cup cut_k(g_j)) \not \subseteq  \mathcal{F}_i $, then we can safely eliminate this $MCS_i$.This option is beneficial in that we do not have to perform two searches in $\mathcal{F}$, but has the drawback of needing to find the union of all faults located in $MCS_i$, ignoring the $g_j$ in $MCS_i$, and then performing the subset search through $\mathcal{F}$. 
+
+
+%Upside: $List(MCS)$ does not grow as fast IF we can eliminate things along the way.\\
+
+%Downside: Worst case scenario, every $cut_k(g_j)$ has to be combined with faults in $MCS_i$ and a complete search of all subsets of $\mathcal{F}$ completed for every $MCS_i$ and NOTHING is eliminated. In this scenario, it is more efficient to wait until the end and do one search through $\mathcal{F}$ and eliminate accordingly. \\
+
+%Let $|MCS| = n$ ($MCS = \{MCS_1,...,MCS_n\}$). In the worst case scenario, we have a contract in every $MCS_i$. There are $\alpha_i$ contracts in $MCS_i$. 
+
+%Every contract has $m_{g_\alpha}$ minimal cut sets. Then every cut set is combined with faults remaining in $MCS_i$ and searched for in $\mathcal{F}_i$. \\ 
+
+
+
+%Which option is better? For now in the algorithm, I will just write Option 1, Option 2, Option 3 in their respective locations. This assumes that if option 1 is used, options 2 and 3 are removed from the algorithm. Obviously. The choice of option will also change a lot depending on our data structures for these lists and what algorithms we use to check for subsets within lists. It is also highly dependent on the model that is used in this analysis. Depending on the model itself, different options would be more efficient.
+
+\begin{algorithm}[H]
+	% \KwData{this text}
+	% \KwResult{how to write algorithm with \LaTeX2e }
+	Input 1: $List(MCS)$ : MCSs that contain contracts \;
+	Input 2: $Cut(g_j)$ : all minimal cut sets of the contract $g_j$ \;
+	Output: List of allowed minimal cut sets \;
+	$P_{List} = \{\}$ List that will hold the probabilities associated with each allowed $MinCutSet$ generated \;
+	%$0 < j \leq \alpha$ \;
+	%$0 < i \leq \gamma$ \;
+	\For{all $MCS_i \in List(MCS)$ }{
+	    Remove $MCS_i$ from $List(MCS)$\;
+	    \For{all $g_j\in MCS_i$}{
+		Remove $g_j$ from $MCS_i$ \;
+		\For{all $cut_k(g_j) \in Cut(g_j)$}{
+			\textbf{Option 2} : if $cut_k(g_j) \subseteq \mathcal{F}_i $ for some $\mathcal{F}_i  \in \mathcal{F}$, then add $cut_k(g_j)$ to $MCS_i$ else break \; 
+			\textbf{Option 3}: if union of faults in $MCS_i$ with $cut_k(g_j)$ is subset of $\mathcal{F}_i $
+				     for some $\mathcal{F}_i \in \mathcal{F}$, then add $cut_k(g_j)$ to $MCS_i$ else break \;
+			\eIf{$\exists g\in MCS_i$}{
+				Add $MCS_i$ to $List(MCS)$ \;
+			}{
+				
+				\textbf{Option 1 and 2}: if $MCS_i \in \mathcal{F}$, add dependencies, calculate probability, and append $p(MCS_i)$ to $P_{List}$ , else break \;
+				\textbf{Option 3} : add dependencies, calculate probability, and append $p(MCS_i)$ to $P_{List}$ \;
+				
+			}%end if-else there is another contract in MCS
+		} % end for cut_i(g)
+               } % end for contracts in MCS_i
+	} % end for List(MCS)
+	Overall probability $= sum\{p_i \in P_{List}\}$ \;
+	\caption{Minimal Cut Set Generation for Probabilistic Analysis}
+	\label{alg:prob_alg}
+\end{algorithm}
+
+
+
+
+
+
+
+
+\textbf{Step 3: Incorporate Dependencies and Calculate Probability}
+\janet{Make step 3 of incorporating dependencies another subsection of 7.3, and remove "calculate probability"}
+Assuming that dependent faults have been collected and mapped appropriately, they are in the following form: \\
+$\{\{f_1 \rightarrow\{f_3, f_7\}, f_5 \rightarrow\{f_2\},...\}$ meaning that $f_3$ and $f_7$ are dependent on $f_1$ and so on.
+
+We make the assumption that there are no nested dependencies. To clarify this, we cannot have something of the form: \\
+$f_1 \rightarrow \{f_3, f_5\}$\\
+$f_3 \rightarrow \{f_4\}$
+
+If this is the case, the user must define the dependency as follows: \\
+$f_1 \rightarrow \{f_3, f_4, f_5\}$. 
+
+\begin{algorithm}[H]
+	% \KwData{this text}
+	% \KwResult{how to write algorithm with \LaTeX2e }
+	Input: $F$: map between allowable combination $F_i$ and associated probability (initially zero) \;
+	Output: $F$: map between allowable combinations with dependencies and associated probability (nonzero) \;
+	$newMCS =$ empty list \;
+	$p=1$ \;
+	\For{all allowable fault combinations $F_i \in F$}{
+		Remove $F_i$ from $F$ \;
+		\For{all $f_i \in MCS$ }{
+		    \If{$f$ is key in dependency map}{
+		    	$p = p*prob(f)$ \;
+		    	append $f$ to $newMCS$ \;
+		    	append dependent faults triggered by $f$ to $newMCS$ \;
+		    	\For{all depFaults triggered by $f$ activation}{
+		    		\If{depFault $\in MCS$}{
+		    			remove depFault from $MCS$ \;
+		    		}%end if depFault is in MCS
+		    	} %end for all dep faults triggered
+		    } %end if f is a key in the dependency map
+		} % end for all faults in MCS
+		Append $F_i \rightarrow p$ to $F$ \;
+	}%end for all combos in F
+	return $newMCS$ as the completed MCS \;
+	\caption{Incorporate Dependencies}
+	\label{alg:dep_alg}
+\end{algorithm}
+
+The results from this algorithm are all minimal cut sets with combined probability greater than or equal to the threshold given at the top level. \\
+
+
+\end{comment}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

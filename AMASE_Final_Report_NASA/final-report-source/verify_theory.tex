@@ -1,0 +1,45 @@
+\subsection{Theory of Verification in the presence of Faults}
+\label{sec:verify_theory}
+The theoretical foundations used to verify a model in the presence of faults relies on AGREE and the theory used to prove the assume guarantee environment~\cite{cofer2012compositional}. 
+
+\begin{comment}
+
+Assuming that dependent faults have been collected and mapped appropriately, they are in the following form: \\
+$\{\{f_1 \rightarrow\{f_3, f_7\}, f_5 \rightarrow\{f_2\},...\}$ meaning that $f_3$ and $f_7$ are dependent on $f_1$ and so on.
+
+We make the assumption that there are no nested dependencies. To clarify this, we cannot have something of the form: \\
+$f_1 \rightarrow \{f_3, f_5\}$\\
+$f_3 \rightarrow \{f_4\}$
+
+If this is the case, the user must define the dependency as follows: \\
+$f_1 \rightarrow \{f_3, f_4, f_5\}$. 
+
+\begin{algorithm}[H]
+	% \KwData{this text}
+	% \KwResult{how to write algorithm with \LaTeX2e }
+	Input: $F$: map between allowable combination $F_i$ and associated probability (initially zero) \;
+	Output: $F$: map between allowable combinations with dependencies and associated probability (nonzero) \;
+	$newMCS =$ empty list \;
+	$p=1$ \;
+	\For{all allowable fault combinations $F_i \in F$}{
+		Remove $F_i$ from $F$ \;
+		\For{all $f_i \in MCS$ }{
+		    \If{$f$ is key in dependency map}{
+		    	$p = p*prob(f)$ \;
+		    	append $f$ to $newMCS$ \;
+		    	append dependent faults triggered by $f$ to $newMCS$ \;
+		    	\For{all depFaults triggered by $f$ activation}{
+		    		\If{depFault $\in MCS$}{
+		    			remove depFault from $MCS$ \;
+		    		}%end if depFault is in MCS
+		    	} %end for all dep faults triggered
+		    } %end if f is a key in the dependency map
+		} % end for all faults in MCS
+		Append $F_i \rightarrow p$ to $F$ \;
+	}%end for all combos in F
+	return $newMCS$ as the completed MCS \;
+	\caption{Incorporate Dependencies}
+	\label{alg:dep_alg}
+\end{algorithm}
+
+\end{comment}

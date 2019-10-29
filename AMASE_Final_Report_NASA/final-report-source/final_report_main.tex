@@ -1,0 +1,168 @@
+\documentclass{article}
+\usepackage{makeidx}
+\usepackage{tabularx,colortbl}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{flushend}
+\usepackage{cite}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{epsfig}
+\usepackage{stmaryrd}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{latexsym}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{comment}
+\usepackage{longtable}
+\usepackage{supertabular}
+\usepackage{times}
+\usepackage{listings}
+\usepackage{subfigure}
+\usepackage{color}
+\usepackage{booktabs}
+\usepackage{balance}
+\usepackage{xspace}
+\usepackage[ruled, vlined, linesnumbered]{algorithm2e}
+\usepackage[autostyle]{csquotes}
+\usepackage[]{algorithm2e}
+\usepackage{authblk}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newcommand{\mkeyword}[1]{\mbox{\texttt{#1}}}
+\DeclareMathOperator{\kuop}{uop}
+\DeclareMathOperator{\kbop}{bop}
+\DeclareMathOperator{\kite}{ite}
+\DeclareMathOperator{\kpre}{pre}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\ktrue}{true}
+\DeclareMathOperator{\kfalse}{false}
+\DeclareMathOperator{\kselect}{select}
+\DeclareMathOperator{\ran}{range}
+\newcommand{\lbb}{[\![}
+\newcommand{\rbb}{]\!]}
+\newcommand{\expr}{\phi}
+\newcommand{\exprS}{\Phi}
+\newcommand{\mats}[1]{\textcolor{red}{#1}}
+\newcommand{\janet}[1]{\textcolor{blue}{#1}}
+\newcommand{\darren}[1]{\textcolor{green}{#1}}
+\newcommand{\danielle}[1]{\textcolor{orange}{#1}}
+
+\sloppypar
+\widowpenalty10000
+
+
+
+\begin{document}
+
+\definecolor{gold}{rgb}{0.90,.66,0}
+\definecolor{dgreen}{rgb}{0,0.6,0}
+\newcommand{\stateequiv}{\equiv_{s}}
+\newcommand{\traceequiv}{\equiv_{\sigma}}
+\newcommand{\ta}{\text{TA}}
+\newcommand{\cta}{\text{TA$_{C}$}}
+\newcommand{\tta}{\text{TA$_{T}$}}
+\newcommand{\ucalg}{\texttt{\small{IVC\_UC}}}
+\newcommand{\ucbfalg}{\texttt{\small{IVC\_UCBF}}}
+
+
+%
+\title{Architectural Modeling and Analysis for Safety Engineering}
+\author[1]{Danielle Stewart}
+\author[2]{Jing (Janet) Liu}
+\author[2]{Darren Cofer}
+\author[1]{Mats Heimdahl}
+\author[1]{Michael W. Whalen}
+\author[3]{Michael Peterson}
+\affil[1]{University of Minnesota Department of Computer Science and Engineering}
+\affil[2]{Collins Aerospace: Trusted Systems - Enterprise Engineering}
+\affil[3]{Collins Aerospace: Flight Controls Safety Engineering - Avionics}
+\setcounter{Maxaffil}{0}
+\renewcommand\Affilfont{\itshape\small}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\listoftables
+\listofalgorithms
+\newpage
+
+\begin{abstract}
+%Mats' abstract
+Model-based development tools are increasingly being used 
+for system-level development of safety-critical systems. Architectural 
+and behavioral models  provide important information 
+that can be leveraged to improve the system
+safety analysis process. Model-based design artifacts 
+produced in early stage development activities can be used to perform system safety analysis,
+reducing costs and providing accurate results throughout
+the system life-cycle. In this report we describe an extension 
+to the Architecture Analysis and Design Language (AADL) that 
+supports modeling of system behavior under failure conditions. This 
+\emph{Safety Annex} enables the independent modeling of component 
+failures and allows safety engineers to weave various types of 
+fault behavior into the nominal system model. The accompanying tool support 
+uses model checking to propagate errors from their source to
+ their effect on %top-level 
+ safety properties without the need to add 
+separate propagation specifications. %Our tools are also able to 
+%compute minimal cut sets for the top level properties which are used to produce faults trees 
+%familiar to safety engineers and certification authorities.  
+The tool also captures all minimal set of fault combinations that can cause violation of the safety properties, that can be compared to qualitative and quantitative objectives as part of the safety assessment process.
+We describe the Safety Annex, illustrate its use with a representative 
+example, and discuss and demonstrate the tool support enabling an 
+analyst to investigate the system behavior under failure conditions.	
+
+\end{abstract}
+
+
+\input{introduction}
+
+\input{preliminaries}
+
+\input{fault_modeling}
+
+\input{byzantine}
+
+\input{implementation}
+
+\input{fault_analysis2}
+
+\input{theory}
+
+\input{related_work}
+
+\input{conclusion}
+
+\vspace{-0.40cm}
+\bibliographystyle{abbrv}
+\bibliography{biblio}
+%\vspace{-7.25cm}
+% This ~ seems to fix an odd bibliography alignment issue
+~
+
+%\ifdefined\TECHREPORT
+%\appendix
+%
+%\section{Appendix: Proof of Equivalence}
+%\input{appendix}
+%\fi
+
+%\section{Appendix: GPCA CENTA Model}
+%\label{appendix:gpcacenta}
+%\begin{figure}[!ht]
+%\begin{center}
+%\includegraphics[scale=0.6]{images/sampled_pca.PNG} %[trim = 0 2 0 0, clip=true]{Comp}
+%\caption{GPCA AGREE Properties modeled as a Timed Automata} \label{fig:samplepca}
+%\end{center}
+%\end{figure}
+
+%\balancecolumns
+
+\end{document} 
