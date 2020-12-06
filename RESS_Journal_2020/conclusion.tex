@@ -1,0 +1,22 @@
+\section{Conclusion}
+\label{sec:conclusion}
+We have developed an extension to the \gls{aadl} language with tool support for formal analysis of system safety properties in the presence of faults. The nominal model is extended with fault definitions, which allows safety analysis and system implementation to be driven from a single common model. The use of formal methods supports comprehensive exploration on the effect of faulty component behaviors on the system level failure condition without the need to add separate propagation specifications to the model. During the development of this approach we worked closely with safety engineers to ensure that the needs of the analysts are supported. This approach was illustrated through the use case of an aircraft system, but can be applied on the development of critical systems in multiple domains. 
+
+The contributions described in this paper are as follows:
+
+\begin{itemize}
+\renewcommand{\labelitemi}{\textbullet}
+		\item close integration of behavioral fault analysis into \gls{aadl}, which allows close connection between system and safety analysis and system generation from the model,
+		\item support for behavioral specification of faults and their  implicit propagation through behavioral relationships in the model,
+		\item additional support to capture binding relationships between hardware and software and logical and physical communications, %and
+		\item the use of formal methods to automatically verify safety properties in the presence of faults and comprehensively enumerate all applicable fault combinations leading to failure conditions under quantitative objectives as part of the safety assessment process, and
+		\item guidance on integration into a traditional safety analysis process.
+\end{itemize}
+
+Future work includes compilation of minimal cut sets into graphical fault tree format, expanding the user interface to provide ease in fault model creation, and transforming the counterexample into a sequence flow showing how the system changes as faults are activated. The research presented in this paper, as well as the contributions of future work, all serve to support the safety assessment process. These contributions do not encompass all of the assessment process, but instead aim to provide automated and comprehensive analysis and also to generate evidence for the assessment process.
+
+
+
+\vspace{2 mm}
+\noindent {\bf Acknowledgments.} This research was funded by NASA contract NNL16AB07T and the University of Minnesota College of Science and Engineering Graduate Fellowship.
+

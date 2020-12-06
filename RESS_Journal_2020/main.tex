@@ -1,0 +1,208 @@
+%\documentclass{sig-alternate-05-2015}
+\documentclass{llncs}
+\pagestyle{headings}
+\usepackage[margin=1.5in]{geometry}
+\usepackage{makeidx}
+\usepackage{tabularx,colortbl}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{flushend}
+\usepackage{cite}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{epsfig}
+\usepackage{stmaryrd}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{bm}
+%\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{latexsym}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{comment}
+\usepackage{longtable}
+\usepackage{supertabular}
+\usepackage{times}
+\usepackage{listings}
+\usepackage{subfigure}
+\usepackage{color}
+\usepackage{booktabs}
+\usepackage{balance}
+\usepackage{xspace}
+\usepackage[ruled, vlined, linesnumbered]{algorithm2e}
+\usepackage[autostyle]{csquotes}
+\usepackage[]{algorithm2e}
+\usepackage[tableposition=top]{caption}
+\usepackage[nonumberlist]{glossaries}
+%\usepackage[font=large]{caption}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{definition}{Definition}
+
+
+%\newcommand{\definition}{\noindent \textbf{Definition} \citation{}}
+%\newcommand{\theorem}{\noindent \textbf{Theorem} \citation{}}
+%\newcommand{\lemma}{\noindent \textbf{Lemma} \citation{}}
+
+%\newdef{lemma}{Lemma}
+%\newdef{definition}{Definition}
+%\newdef{theorem}{Theorem}
+%\newdef{corollary}{Corollary}
+%\newdef{note}{Note}
+%\newdef{axiom}{Axiom}
+\newcommand{\mkeyword}[1]{\mbox{\texttt{#1}}}
+\DeclareMathOperator{\kuop}{uop}
+\DeclareMathOperator{\kbop}{bop}
+\DeclareMathOperator{\kite}{ite}
+\DeclareMathOperator{\kpre}{pre}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\ktrue}{true}
+\DeclareMathOperator{\kfalse}{false}
+\DeclareMathOperator{\kselect}{select}
+\DeclareMathOperator{\ran}{range}
+\newcommand{\lbb}{[\![}
+\newcommand{\rbb}{]\!]}
+\newcommand{\expr}{\phi}
+\newcommand{\exprS}{\Phi}
+\newcommand{\mats}[1]{\textcolor{red}{#1}}
+\newcommand{\janet}[1]{\textcolor{blue}{#1}}
+\newcommand{\darren}[1]{\textcolor{green}{#1}}
+\newcommand{\danielle}[1]{\textcolor{orange}{#1}}
+
+\sloppypar
+
+\setacronymstyle{long-short}
+\newacronym{aadl}{AADL}{Architecture Analysis and Design Language}
+\newacronym{sae}{SAE}{Society of Automotive Engineering}
+\newacronym{agree}{AGREE}{Assume Guarantee REasoning Environment}
+\newacronym{mbse}{MBSE}{Model-based Systems Engineering}
+\newacronym{mbsa}{MBSA}{Model-based Safety Analysis/Assessment}
+\newacronym{arp}{ARP}{Aerospace Recommended Practices}
+\newacronym{sfha}{SFHA}{System-level Functional Hazard Assessment}
+\newacronym{pssa}{PSSA}{Preliminary System Safety Assessment}
+\newacronym{ssa}{SSA}{System Safety Assessment}
+\newacronym{fta}{FTA}{Fault Tree Analysis}
+\newacronym{bsd}{BSD}{Berkley Software Distribution}
+\newacronym{wbs}{WBS}{Wheel Brake System}
+\newacronym{bscu}{BSCU}{Braking System Control Unit}
+\newacronym{air}{AIR}{Aerospace Information Report}
+\newacronym{hw}{HW}{Hardware}
+\newacronym{sw}{SW}{Software}
+\newacronym{cpu}{CPU}{Central Processing Unit}
+\newacronym{osate}{OSATE}{Open Source AADL Tool Environment}
+\newacronym{sasm}{SASM}{Safety Analysis System Model}
+\newacronym{fem}{FEM}{Failure Effect Modeling}
+\newacronym{esm}{ESM}{Existing System Model}
+\newacronym{flm}{FLM}{Failure Logic Modeling}
+
+\makenoidxglossaries
+
+
+\begin{document}
+
+\definecolor{gold}{rgb}{0.90,.66,0}
+\definecolor{dgreen}{rgb}{0,0.6,0}
+\newcommand{\stateequiv}{\equiv_{s}}
+\newcommand{\traceequiv}{\equiv_{\sigma}}
+\newcommand{\ta}{\text{TA}}
+\newcommand{\cta}{\text{TA$_{C}$}}
+\newcommand{\tta}{\text{TA$_{T}$}}
+\newcommand{\ucalg}{\texttt{\small{IVC\_UC}}}
+\newcommand{\ucbfalg}{\texttt{\small{IVC\_UCBF}}}
+
+
+\title{AADL-Based Safety Analysis Using Formal Methods Applied to Aircraft Digital Systems}
+%
+\author{Danielle Stewart\inst{1}
+\and Jing (Janet) Liu\inst{2}
+\and Darren Cofer\inst{2}
+\and Mats Heimdahl\inst{1}
+\and \\ Michael W. Whalen\inst{1}
+\and Michael Peterson\inst{3}}
+\institute{University of Minnesota\\Department of Computer
+Science and Engineering\\
+\email{dkstewar, whalen, heimdahl}@cs.umn.edu
+\and
+Collins Aerospace\\
+%Advanced Technology Center
+Trusted Systems - Enterprise Engineering
+\\
+\email{Jing.Liu, Darren.Cofer}@collins.com
+\and
+Collins Aerospace\\
+%Commercial Systems 
+Flight Controls Safety Engineering - Avionics\\
+\email{Michael.Peterson}@collins.com
+}
+\maketitle
+
+\begin{abstract}
+%Mats' abstract
+Model-based development tools are increasingly being used 
+for system-level development of safety-critical systems. Architectural 
+and behavioral models  provide important information 
+that can be leveraged to improve the system
+safety analysis process. Model-based design artifacts 
+produced in early stage development activities can be used to perform system safety analysis,
+reducing costs, and providing accurate results throughout
+the system life-cycle.  In this paper we describe an extension 
+to the Architecture Analysis and Design Language (AADL) that 
+supports modeling of system behavior under failure conditions. This 
+\emph{Safety Annex} enables the independent modeling of component 
+failures and allows safety engineers to weave various types of 
+fault behavior into the nominal system model. The accompanying tool support uses model checking to verify safety properties in the presence of faults and comprehensively enumerate all applicable fault combinations leading to failure conditions
+under quantitative objectives as part of the safety assessment process.  
+We describe the Safety Annex, illustrate its use with a representative 
+example, and discuss the tool support enabling an 
+analyst to investigate the system behavior under failure conditions.	
+	
+
+\end{abstract}
+
+\keywords{Model-based safety analysis; Model-based systems engineering; fault analysis; safety engineering; AADL; fault injection}
+
+\input{introduction}
+
+\input{preliminaries}
+	%process
+	%agree
+	%updated_process
+\input{implementation}
+
+\input{fault_modeling}
+
+\input{fault_analysis2}
+
+\input{related_work}
+
+\input{conclusion}
+
+\printglossary[type=\acronymtype]
+\printnoidxglossary
+
+\bibliographystyle{abbrv}
+\bibliography{biblio}
+%\vspace{-7.25cm}
+% This ~ seems to fix an odd bibliography alignment issue
+~
+
+%\ifdefined\TECHREPORT
+%\appendix
+%
+%\section{Appendix: Proof of Equivalence}
+%\input{appendix}
+%\fi
+
+%\section{Appendix: GPCA CENTA Model}
+%\label{appendix:gpcacenta}
+%\begin{figure}[!ht]
+%\begin{center}
+%\includegraphics[scale=0.6]{images/sampled_pca.PNG} %[trim = 0 2 0 0, clip=true]{Comp}
+%\caption{GPCA AGREE Properties modeled as a Timed Automata} \label{fig:samplepca}
+%\end{center}
+%\end{figure}
+
+%\balancecolumns
+
+\end{document} 
